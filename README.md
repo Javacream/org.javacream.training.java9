@@ -77,7 +77,7 @@ Module classloader
 - module k&ouml;nnen pakete exportieren &rarr; `export <package-name>`
 - module k&ouml;nnen andere module anfordern &rarr; `requires <module-name>`
 - export kann spezifizieren, an wen exportiert wird: `export <package-name> to <module-name>`
-- requires kann spezifiziert werden: `requires transitive`
+- requires kann spezifizieren werden: `requires transitive`
 - Projekte k&ouml;nnen komplett inhaltlos sein, und NUR eine module-info enthalten &rarr; transitive Abh&auml;ngigkeiten etc. verkapseln
 - Anmerkung: Ein Jigsaw Modul hat keinen lifecycle. M&ouml;chte ich wissen wann mein Modul (de)aktiviert wird? &rarr; static initialiser block
 
@@ -101,7 +101,7 @@ ModuleDescriptor descriptor = obj.getClass().getModule().getModuleDescriptor();
 ~~~
 &rarr; zur Laufzeit Zugriff auf das module-info.java und Infos darin  
 
-Beispiel: statt `getResourcesAsStream` könnte man &uuml;ber das Modul arbeiten  
+Beispiel: statt `getResourcesAsStream` k&ouml;nnte man &uuml;ber das Modul arbeiten  
 *Note*: Auf `.getModule()` k&ouml;nnen auch die Annotations gefunden werden, man k&ouml;nnte behaviour nach annotation speccen
 
 ## Sprachumfang: Neuerungen in Java
@@ -141,3 +141,41 @@ List<String> names = new ArrayList<>() {...}
 - Subscription asynchron ohne zutun des Programmierers
 - `Publisher` &rarr; `Subscription` &larr; `WorkerThread` &rarr; `Subscriber`
 - Reactive programming
+
+### Werkzeuge
+#### Werkzeuge im JDK
+- Interner HTTP-Server unterst&uuml;tzt nun HTTP2
+- *Flightrecorder*<sup>[1](#foot1)</sup> ist nun offizieller Bestandteil der JRE, nicht mehr hinter der Lizenz
+- *jshell* eingef&uuml;hrt (Kommandozeile f&uuml;r schnelles Java Testing/"Hacking"/"Scripting", ohne `public class Main`, `public static void main()` declarations etc.)
+- *jdep* eingef&uuml;hrt (Dependency Analyse)
+- *jlink* eingef&uuml;hrt (Image der Applikation f&uuml;r deployment, linking von libs)
+
+#### Stand der Community f&uuml;r Java9
+- Spring/Hibernate etc. nicht stark betroffen, prim&auml; ohne gro&szlig;en Aufwand betroffen
+    - Modularisierung: Communities sind in Portierung gestartet, haben aber keine Eile
+- Java9 bringt außer Modularisierung wenig Druck zu Umstellung aus architektureller/struktureller Sicht, anders als Java8, das direkt die "Philosophie" von Dingen wie Spring Templates beeinflusst
+- Apache Group &rarr; Portierung in fernerer Zukunft
+- Maven Repositories &rarr; keine Auswirkungen
+- Build-Werkzeuge &rarr; In Arbeit, Auswirkungen durch Modularisierung, Prozesse werden wohl viel Nacharbeit erfordern
+- Applikationsserver &rarr; In Arbeit
+    - &Auml;ltere Versionen laufen zwar ziemlich sicher auch unter Java9 JVM, aber Modularisierung k&ouml;nnte gro&szlig;e Vorteile schaffen, Updates sind wahrscheinlich
+    - JEE Spezifikation k&ouml;nnte durch Altlasten nicht einfach erweiterbar sein, evtl. gr&ouml;&szlig;ere Umstellung kommend
+- Oracle: neue Release-Politik, evtl. Release ca. alle &frac12; Jahre? St&auml;rkere Community-Einbindung
+
+## Fragerunde
+- Umstieg jetzt? 
+> Build Tools als erstes analysieren. Dann durchaus modules einführen
+- `module-info.java`, Komplexität und Best Practices?
+> Meist sehr übersichtlich, aber projekt kann durchaus 10-20 exports haben
+> * Frage ist stets: wer ist zuständig, wer macht die dependencies wie? Requires könnten theoretisch für Komplexität sorgen
+> * Involvierung des Build-Tools klären
+- Zusammenhang Aggregat-poms?
+> Ein Maven Aggregat ist auch ein module aggregat, Komplexität der dependencies spiegelt sich in Modul-Granularität wieder 
+- Benennung der Module? Projektname = Modulname?
+> Voll qualifizieren durchaus empfehlenswert für Eindeutigkeit. Kann für Lesbarkeit aber auch verzichtet werden. Modulname convention ist: lowercase
+> Sprechende Namsgebung wird durch Module **noch** wichtiger
+- Buchempfehlungen?
+> Keine. Zu Modulkonzepten gibt es bereits derart viel Erfahrung und Diskussionstiefe, dass Literatur dort interessant sein kann. Aber nichts speziell auf Java9 bezogen
+
+
+<sup><a name="foot1">1</a></sup>: Metrikinformationen der Aufrufstatistiken der JVM, wie lange haben welche Aufrufe gedauert
