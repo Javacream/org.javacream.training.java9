@@ -9,6 +9,6 @@ import org.javacream.training.java9.jigsaw.publisher.StringSubscriber;
  */
 module org.javacream.training.java9.jigsaw.publisher {
 	exports org.javacream.training.java9.jigsaw.publisher;
-	exports org.javacream.training.java9.jigsaw.publisher.impl to org.javacream.training.java9.jigsaw.application;
+	exports org.javacream.training.java9.jigsaw.publisher.impl;
 	uses StringSubscriber;
 }
